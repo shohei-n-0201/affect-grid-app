@@ -133,8 +133,8 @@ jsPsych.plugins["affect-grid"] = (function () {
 					pleasantness: response.column + 1
 				};
 
-				// CSVを即時ダウンロード
-				var csv = "arousal,pleasantness,rt\n" + trial_data.arousal + "," + trial_data.pleasantness + "," + Math.round(trial_data.rt) + "\n";
+				var csv = "arousal,pleasantness,rt\n";
+				csv += trial_data.arousal + "," + trial_data.pleasantness + "," + Math.round(trial_data.rt) + "\n";
 				var blob = new Blob([csv], { type: 'text/csv' });
 				var url = URL.createObjectURL(blob);
 				var a = document.createElement('a');
