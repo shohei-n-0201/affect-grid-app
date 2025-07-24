@@ -33,55 +33,49 @@
 </body>
 
 <script>
-  const jsPsych = initJsPsych({
-    on_finish: () => {
+  var timeline = [
+    {
+      type: 'affect-grid',
+      custom_label: true,
+      grid_square_size: 60,
+      label_name: {
+        arousal: "覚醒",
+        sleepiness: "睡眠",
+        pleasant: "快",
+        unpleasant: "不快",
+        stress: "緊張",
+        excitement: "興奮",
+        depression: "落ち込み",
+        relaxation: "リラックス"
+      },
+      rated_stimulus: "<p style='text-align: center;'>刺激Aに対するあなたの感情を選んでください</p>"
+    },
+    {
+      type: 'affect-grid',
+      custom_label: true,
+      grid_square_size: 60,
+      label_name: {
+        arousal: "覚醒",
+        sleepiness: "睡眠",
+        pleasant: "快",
+        unpleasant: "不快"
+      },
+      rated_stimulus: "<div style='text-align: center;'><img src='irasutoya.png' width='150px'></div>"
+    }
+  ];
+
+  jsPsych.init({
+    timeline: timeline,
+    on_finish: function () {
       document.getElementById('download-btn').style.display = 'block';
     }
   });
 
-  const createAffectGrid = (stimulusHTML, labels = {}) => ({
-    type: 'affect-grid',
-    custom_label: Object.keys(labels).length > 0,
-    grid_square_size: 60,
-    label_name: {
-      arousal: labels.arousal || "Arousal",
-      sleepiness: labels.sleepiness || "Sleepiness",
-      pleasant: labels.pleasant || "Pleasant",
-      unpleasant: labels.unpleasant || "Unpleasant",
-      stress: labels.stress || "",
-      excitement: labels.excitement || "",
-      depression: labels.depression || "",
-      relaxation: labels.relaxation || ""
-    },
-    rated_stimulus: stimulusHTML
-  });
-
-  const timeline = [
-    createAffectGrid("<p>刺激Aに対するあなたの感情を選んでください</p>", {
-      arousal: "覚醒",
-      sleepiness: "睡眠",
-      pleasant: "快",
-      unpleasant: "不快",
-      stress: "緊張",
-      excitement: "興奮",
-      depression: "落ち込み",
-      relaxation: "リラックス"
-    }),
-    createAffectGrid("<div style='text-align: center;'><img src='irasutoya.png' width='150px'></div>", {
-      arousal: "覚醒",
-      sleepiness: "睡眠",
-      pleasant: "快",
-      unpleasant: "不快"
-    })
-  ];
-
-  jsPsych.run(timeline);
-
-  document.getElementById('download-btn').addEventListener('click', () => {
-    const csv = jsPsych.data.get().csv();
-    const blob = new Blob([csv], { type: 'text/csv' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
+  document.getElementById('download-btn').addEventListener('click', function () {
+    var csv = jsPsych.data.get().csv();
+    var blob = new Blob([csv], { type: 'text/csv' });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
     a.href = url;
     a.download = 'affect_grid_data.csv';
     document.body.appendChild(a);
