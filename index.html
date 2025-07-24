@@ -33,6 +33,12 @@
 </body>
 
 <script>
+  const jsPsych = initJsPsych({
+    on_finish: () => {
+      document.getElementById('download-btn').style.display = 'block';
+    }
+  });
+
   const createAffectGrid = (stimulusHTML, labels = {}) => ({
     type: 'affect-grid',
     custom_label: Object.keys(labels).length > 0,
@@ -69,12 +75,7 @@
     })
   ];
 
-  jsPsych.init({
-    timeline: timeline,
-    on_finish: function () {
-      document.getElementById('download-btn').style.display = 'block';
-    }
-  });
+  jsPsych.run(timeline);
 
   document.getElementById('download-btn').addEventListener('click', () => {
     const csv = jsPsych.data.get().csv();
