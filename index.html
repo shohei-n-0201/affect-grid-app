@@ -33,36 +33,25 @@
 </body>
 
 <script>
-  var timeline = [
-    {
-      type: 'affect-grid',
-      custom_label: true,
-      grid_square_size: 60,
-      label_name: {
-        arousal: "覚醒",
-        sleepiness: "睡眠",
-        pleasant: "快",
-        unpleasant: "不快",
-        stress: "緊張",
-        excitement: "興奮",
-        depression: "落ち込み",
-        relaxation: "リラックス"
-      },
-      rated_stimulus: "<p style='text-align: center;'>刺激Aに対するあなたの感情を選んでください</p>"
+var timeline = [
+  {
+    type: 'affect-grid',
+    custom_label: true,
+    grid_square_size: 60,
+    label_name: {
+      arousal: "覚醒",
+      sleepiness: "睡眠",
+      pleasant: "快",
+      unpleasant: "不快",
+      stress: "緊張",
+      excitement: "興奮",
+      depression: "落ち込み",
+      relaxation: "リラックス"
     },
-    {
-      type: 'affect-grid',
-      custom_label: true,
-      grid_square_size: 60,
-      label_name: {
-        arousal: "覚醒",
-        sleepiness: "睡眠",
-        pleasant: "快",
-        unpleasant: "不快"
-      },
-      rated_stimulus: "<div style='text-align: center;'><img src='irasutoya.png' width='150px'></div>"
-    }
-  ];
+    rated_stimulus: "<p style='text-align: center;'>刺激Aに対するあなたの感情を選んでください</p>"
+  }
+];
+
 
   jsPsych.init({
     timeline: timeline,
