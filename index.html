@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Affect Grid for iPad</title>
+  <link rel="stylesheet" href="/css/jspsych.css">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      touch-action: manipulation;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+    canvas {
+      touch-action: manipulation;
+    }
+    #download-btn {
+      display: block;
+      margin: 20px auto;
+      padding: 10px 20px;
+      font-size: 18px;
+    }
+  </style>
+  <script src="/js/jspsych.js"></script>
+  <script src="/jspsych-affect-grid.js"></script>
+</head>
+
+<body>
+  <button id="download-btn" style="display:none;">結果をCSVで保存</button>
+</body>
+
+<script>
+  const createAffectGrid = (stimulusHTML, labels = {}) => ({
+    type: 'affect-grid',
+    custom_label: Object.keys(labels).length > 0,
+    grid_square_size: 60, // 適度にiPad向けサイズ
+    label_name: {
+      arousal: labels.arousal || "Arousal",
+      sleepiness: labels.sleepiness || "Sleepiness",
+      pleasant: labels.pleasant || "Pleasant",
+      unpleasant: labels.unpleasant || "Unpleasant",
+      stress: labels.stress || "",
+      excitement: labels.excitement || "",
+      depression: labels.depression || "",
+      relaxation: labels.relaxation || ""
+    },
+    rated_stimulus: stimulusHTML
+  });
+
+  const timeline = [
+    createAffectGrid("<p>刺激Aに対するあなたの感情を選んでください</p>", {
+      arousal: "覚醒",
+      sleepiness: "睡眠",
+      pleasant: "快",
+      unpleasant: "不快",
+      stress: "緊張",
+      excitement: "興奮",
+      depression: "落ち込み",
+      relaxation: "リラックス"
+    }),
+    createAffectGrid("<div style='text-align: center;'><img src='irasutoya.png' width='150px'></div>", {
+      arousal: "覚醒",
+      sleepiness: "睡眠",
+      pleasant: "快",
+      unpleasant: "不快"
+    })
+  ];
+
+  jsPsych.init({
+    timeline: timeline,
+    on_finish: function () {
+      document.getElementById('download-btn').style.display = 'block';
+    }
+  });
+
+  document.getElementById('download-btn').addEventListener('click', () => {
+    const csv = jsPsych.data.get().csv();
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'affect_grid_data.csv';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  });
+</script>
+
+</html>
