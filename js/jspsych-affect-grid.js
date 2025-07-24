@@ -180,5 +180,3 @@ jsPsych.plugins["affect-grid"] = (function () {
 	return plugin;
 })();
 
-
-
