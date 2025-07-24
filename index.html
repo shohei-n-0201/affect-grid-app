@@ -25,7 +25,7 @@
     }
   </style>
   <script src="js/jspsych.js"></script>
-  <script src="jspsych-affect-grid.js"></script>
+  <script src="js/jspsych-affect-grid.js"></script>
 </head>
 
 <body>
@@ -36,7 +36,7 @@
   const createAffectGrid = (stimulusHTML, labels = {}) => ({
     type: 'affect-grid',
     custom_label: Object.keys(labels).length > 0,
-    grid_square_size: 60, // 適度にiPad向けサイズ
+    grid_square_size: 60,
     label_name: {
       arousal: labels.arousal || "Arousal",
       sleepiness: labels.sleepiness || "Sleepiness",
