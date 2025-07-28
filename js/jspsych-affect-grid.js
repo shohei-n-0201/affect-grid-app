@@ -104,7 +104,6 @@ jsPsych.plugins["affect-grid"] = (function () {
 						<option value="その他">その他</option>
 					</select>
 				</label>
-				&nbsp;&nbsp;
     				<br>
 				<label>条件: <input type="text" id="participant-condition" pattern="[A-Za-z]+" required></label>
 			</div>
