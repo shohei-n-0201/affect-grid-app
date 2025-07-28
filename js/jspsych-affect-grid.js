@@ -105,6 +105,7 @@ jsPsych.plugins["affect-grid"] = (function () {
 					</select>
 				</label>
 				&nbsp;&nbsp;
+    				<br>
 				<label>条件: <input type="text" id="participant-condition" pattern="[A-Za-z]+" required></label>
 			</div>
 		` + this.stimulus(trial.grid_square_size);
