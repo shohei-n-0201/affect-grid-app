@@ -91,13 +91,23 @@ jsPsych.plugins["affect-grid"] = (function () {
 			this.axis = Object.assign(defo, trial.label_name);
 		}
 
-		const subjectDiv = document.createElement('div');
-		subjectDiv.style.textAlign = 'center';
-		subjectDiv.style.marginBottom = '10px';
-		subjectDiv.innerHTML = '<label for="subject-id">被験者番号: </label><input type="number" id="subject-id" min="1" style="font-size:16px; width:60px;">';
-		display_element.appendChild(subjectDiv);
-
-		display_element.insertAdjacentHTML('beforeend', this.stimulus(trial.grid_square_size));
+		display_element.innerHTML = `
+			<div style="text-align: center; margin-bottom: 20px;">
+				<label>被験者番号: <input type="number" id="participant-id" min="1" required></label>
+				&nbsp;&nbsp;
+				<label>年齢: <input type="number" id="participant-age" min="1" required></label>
+				&nbsp;&nbsp;
+				<label>性別: 
+					<select id="participant-gender">
+						<option value="男性">男性</option>
+						<option value="女性">女性</option>
+						<option value="その他">その他</option>
+					</select>
+				</label>
+				&nbsp;&nbsp;
+				<label>条件: <input type="text" id="participant-condition" pattern="[A-Za-z]+" required></label>
+			</div>
+		` + this.stimulus(trial.grid_square_size);
 
 		if (trial.rated_stimulus !== 'undefined') {
 			display_element.insertAdjacentHTML('afterbegin', trial.rated_stimulus);
@@ -131,30 +141,36 @@ jsPsych.plugins["affect-grid"] = (function () {
 		startTime = performance.now();
 
 		submitBtn.addEventListener('click', function () {
-			const subjectIdInput = document.getElementById('subject-id');
-			const subjectId = subjectIdInput.value.trim();
-
-			if (!subjectId || isNaN(subjectId) || parseInt(subjectId) < 1) {
-				alert("有効な被験者番号を入力してください (1以上の整数)");
-				return;
-			}
-
 			if (selectedCell) {
+				const id = document.getElementById('participant-id').value;
+				const age = document.getElementById('participant-age').value;
+				const gender = document.getElementById('participant-gender').value;
+				const condition = document.getElementById('participant-condition').value;
+
+				if (!id || !age || !gender || !condition) {
+					alert("すべての項目を入力してください。");
+					return;
+				}
+
 				var trial_data = {
+					subject_id: id,
+					age: age,
+					gender: gender,
+					condition: condition,
 					rt: response.rt,
 					stimulus: trial.rated_stimulus,
 					arousal: 10 - (response.row + 1),
-					pleasantness: response.column + 1,
-					subject_id: subjectId
+					pleasantness: response.column + 1
 				};
 
-				var csv = "subject_id,arousal,pleasantness,rt\n";
-				csv += subjectId + "," + trial_data.arousal + "," + trial_data.pleasantness + "," + Math.round(trial_data.rt) + "\n";
+				var csv = "subject_id,age,gender,condition,arousal,pleasantness,rt\n";
+				csv += `${id},${age},${gender},${condition},${trial_data.arousal},${trial_data.pleasantness},${Math.round(trial_data.rt)}\n`;
+
 				var blob = new Blob([csv], { type: 'text/csv' });
 				var url = URL.createObjectURL(blob);
 				var a = document.createElement('a');
 				a.href = url;
-				a.download = 'affect_grid_data_' + subjectId + '.csv';
+				a.download = `affect_grid_data_${id}_${condition}.csv`;
 				document.body.appendChild(a);
 				a.click();
 				document.body.removeChild(a);
