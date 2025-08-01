@@ -104,8 +104,15 @@ jsPsych.plugins["affect-grid"] = (function () {
 						<option value="その他">その他</option>
 					</select>
 				</label>
-    				<br>
+				<br>
 				<label>条件: <input type="text" id="participant-condition" pattern="[A-Za-z]+" required></label>
+				&nbsp;&nbsp;
+				<label>猫を飼ったことがあるか: 
+					<select id="participant-cat">
+						<option value="はい">はい</option>
+						<option value="いいえ">いいえ</option>
+					</select>
+				</label>
 			</div>
 		` + this.stimulus(trial.grid_square_size);
 
@@ -146,8 +153,9 @@ jsPsych.plugins["affect-grid"] = (function () {
 				const age = document.getElementById('participant-age').value;
 				const gender = document.getElementById('participant-gender').value;
 				const condition = document.getElementById('participant-condition').value;
+				const cat = document.getElementById('participant-cat').value;
 
-				if (!id || !age || !gender || !condition) {
+				if (!id || !age || !gender || !condition || !cat) {
 					alert("すべての項目を入力してください。");
 					return;
 				}
@@ -157,14 +165,15 @@ jsPsych.plugins["affect-grid"] = (function () {
 					age: age,
 					gender: gender,
 					condition: condition,
+					cat_experience: cat,
 					rt: response.rt,
 					stimulus: trial.rated_stimulus,
 					arousal: 10 - (response.row + 1),
 					pleasantness: response.column + 1
 				};
 
-				var csv = "subject_id,age,gender,condition,arousal,pleasantness,rt\n";
-				csv += `${id},${age},${gender},${condition},${trial_data.arousal},${trial_data.pleasantness},${Math.round(trial_data.rt)}\n`;
+				var csv = "subject_id,age,gender,condition,cat_experience,arousal,pleasantness,rt\n";
+				csv += `${id},${age},${gender},${condition},${cat},${trial_data.arousal},${trial_data.pleasantness},${Math.round(trial_data.rt)}\n`;
 
 				var blob = new Blob([csv], { type: 'text/csv' });
 				var url = URL.createObjectURL(blob);
@@ -210,4 +219,5 @@ jsPsych.plugins["affect-grid"] = (function () {
 
 	return plugin;
 })();
+
 
